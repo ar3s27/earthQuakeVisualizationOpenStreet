@@ -19,6 +19,11 @@ def create_map_with_markers(data):
     # Get the most recent earthquake data
     most_recent_quake = None
     most_recent_date = ""
+    for quake_id, entry in data.items():
+        date = entry['date']
+        if date > most_recent_date:
+            most_recent_date = date
+            most_recent_quake = entry
 
     # Iterate over each earthquake event in the data
     for quake_id, entry in data.items():
@@ -37,8 +42,8 @@ def create_map_with_markers(data):
             marker_color = 'blue'
 
         # Add marker to the map
-        folium.Marker([enlem, boylam], popup=popup_content).add_to(harita)
-
+        folium.Marker([enlem, boylam], popup=popup_content, icon=folium.Icon(color=marker_color)).add_to(harita)
+    
     return harita
 
 @app.route('/')
