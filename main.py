@@ -14,8 +14,7 @@ def fetch_earthquake_data(url):
 
 def create_map_with_markers(data):
     # Initialize the map
-    harita = folium.Map(location=[39.3335, 35.1500], zoom_start=6)
-
+    harita = folium.Map(location=[38.3335, 35.1500], zoom_start=6)
     # Get the most recent earthquake data
     most_recent_quake = None
     most_recent_date = ""
