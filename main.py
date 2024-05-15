@@ -88,10 +88,10 @@ schedule.every(1).minutes.do(update_map)
 
 @app.route('/')
 def index():
-    return render_template('index.html', map_html=map_html)
+    return render_template('index.html')
 
 if __name__ == '__main__':
     while True:
         schedule.run_pending()
         time.sleep(1)
-    app.run(debug=True)
+        app.run(debug=True)
