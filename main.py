@@ -55,7 +55,6 @@ def create_map_with_markers(data):
         popup = folium.Popup(iframe, max_width=500)
         # Haritaya işaret ekler
         folium.Marker([enlem, boylam], popup=popup, icon=folium.Icon(color=marker_color)).add_to(harita)
-
     # Daire ekler
     circle = folium.Circle(
         location=[circle_latitude, circle_longitude],
