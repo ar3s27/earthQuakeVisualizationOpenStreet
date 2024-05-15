@@ -66,22 +66,25 @@ def create_map_with_markers(data):
 
 @app.route('/')
 def index():
-    # Deprem veri URL'si
-    url = "https://deprem-gorsellestirme.vercel.app"
+    try:
+        # Deprem veri URL'si
+        url = "https://deprem-gorsellestirme.vercel.app"
 
-    # Deprem verilerini alır
-    earthquake_data = fetch_earthquake_data(url)
+        # Deprem verilerini alır
+        earthquake_data = fetch_earthquake_data(url)
 
-    if earthquake_data:
-        # İşaretli haritayı oluşturur
-        map_with_markers = create_map_with_markers(earthquake_data)
+        if earthquake_data:
+            # İşaretli haritayı oluşturur
+            map_with_markers = create_map_with_markers(earthquake_data)
 
-        # Haritayı bir HTML dizesi olarak kaydeder
-        map_html = map_with_markers._repr_html_()
+            # Haritayı bir HTML dizesi olarak kaydeder
+            map_html = map_with_markers._repr_html_()
 
-        return render_template('index.html', map_html=map_html)
-    else:
-        return "Deprem verileri alınamadı."
+            return render_template('index.html', map_html=map_html)
+        else:
+            return "Deprem verileri alınamadı."
+    except Exception as e:
+        return f"Hata oluştu: {str(e)}"
 
 if __name__ == '__main__':
     app.run(debug=True)
