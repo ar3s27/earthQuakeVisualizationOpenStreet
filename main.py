@@ -88,7 +88,7 @@ schedule.every(1).minutes.do(update_map)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', map_html=map_html)
 
 if __name__ == '__main__':
     while True:
