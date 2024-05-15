@@ -2,7 +2,7 @@ import branca
 from flask import Flask, render_template
 import requests
 import folium
-import calculations as calc
+from calculations import earthquake_percentage,earthquake_location
 
 app = Flask(__name__)
 
@@ -25,6 +25,10 @@ def create_map_with_markers(data):
         if date > most_recent_date:
             most_recent_date = date
             most_recent_quake = entry
+
+    # Circle'ın enlem ve boylamını en son depreme göre ayarla
+    circle_latitude = most_recent_quake['latitude']
+    circle_longitude = most_recent_quake['longitude']
 
     # Verideki her deprem olayı için işlem yapar
     for quake_id, entry in data.items():
@@ -54,37 +58,34 @@ def create_map_with_markers(data):
 
     # Daire ekler
     circle = folium.Circle(
-        location=calc.earthquake_location(),
+        location=[circle_latitude, circle_longitude],
         radius=400000,
         color="red",
         fill=True,
         fill_color="red",
-        tooltip=f"<h4>Bu Bölgede 3.5 Üzeri Deprem Olma Olasığı %{calc.earthquake_percentage()}</h4>",
+        tooltip=f"<h4>Bu Bölgede 3.5 Üzeri Deprem Olma Olasığı %{earthquake_percentage()}</h4>",
     ).add_to(harita)
     
     return harita
 
 @app.route('/')
 def index():
-    try:
-        # Deprem veri URL'si
-        url = "https://deprem-gorsellestirme.vercel.app"
+    # Deprem veri URL'si
+    url = "https://deprem-gorsellestirme.vercel.app"
 
-        # Deprem verilerini alır
-        earthquake_data = fetch_earthquake_data(url)
+    # Deprem verilerini alır
+    earthquake_data = fetch_earthquake_data(url)
 
-        if earthquake_data:
-            # İşaretli haritayı oluşturur
-            map_with_markers = create_map_with_markers(earthquake_data)
+    if earthquake_data:
+        # İşaretli haritayı oluşturur
+        map_with_markers = create_map_with_markers(earthquake_data)
 
-            # Haritayı bir HTML dizesi olarak kaydeder
-            map_html = map_with_markers._repr_html_()
+        # Haritayı bir HTML dizesi olarak kaydeder
+        map_html = map_with_markers._repr_html_()
 
-            return render_template('index.html', map_html=map_html)
-        else:
-            return "Deprem verileri alınamadı."
-    except Exception as e:
-        return f"Hata oluştu: {str(e)}"
+        return render_template('index.html', map_html=map_html)
+    else:
+        return "Deprem verileri alınamadı."
 
 if __name__ == '__main__':
     app.run(debug=True)
