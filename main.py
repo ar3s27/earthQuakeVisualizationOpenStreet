@@ -2,7 +2,9 @@ import branca
 from flask import Flask, render_template
 import requests
 import folium
-import calculations as calc
+from calculations import earthquake_percentage, earthquake_location
+import schedule
+import time
 
 app = Flask(__name__)
 
@@ -54,37 +56,42 @@ def create_map_with_markers(data):
 
     # Daire ekler
     circle = folium.Circle(
-        location=calc.earthquake_location(),
+        location=earthquake_location(),
         radius=400000,
         color="red",
         fill=True,
         fill_color="red",
-        tooltip=f"<h4>Bu Bölgede 3.5 Üzeri Deprem Olma Olasığı %{calc.earthquake_percentage()}</h4>",
+        tooltip=f"<h4>Bu Bölgede 3.5 Üzeri Deprem Olma Olasığı %{earthquake_percentage()}</h4>",
     ).add_to(harita)
     
     return harita
 
+def update_map():
+    # Deprem veri URL'si
+    url = "https://deprem-gorsellestirme.vercel.app"
+
+    # Deprem verilerini alır
+    earthquake_data = fetch_earthquake_data(url)
+
+    if earthquake_data:
+        # İşaretli haritayı oluşturur
+        map_with_markers = create_map_with_markers(earthquake_data)
+
+        # Haritayı bir HTML dizesi olarak kaydeder
+        map_html = map_with_markers._repr_html_()
+
+        # Şablonu günceller
+        with app.app_context():
+            app.template_env.globals['map_html'] = map_html
+
+schedule.every(1).minutes.do(update_map)
+
 @app.route('/')
 def index():
-    try:
-        # Deprem veri URL'si
-        url = "https://deprem-gorsellestirme.vercel.app"
-
-        # Deprem verilerini alır
-        earthquake_data = fetch_earthquake_data(url)
-
-        if earthquake_data:
-            # İşaretli haritayı oluşturur
-            map_with_markers = create_map_with_markers(earthquake_data)
-
-            # Haritayı bir HTML dizesi olarak kaydeder
-            map_html = map_with_markers._repr_html_()
-
-            return render_template('index.html', map_html=map_html)
-        else:
-            return "Deprem verileri alınamadı."
-    except Exception as e:
-        return f"Hata oluştu: {str(e)}"
+    return render_template('index.html')
 
 if __name__ == '__main__':
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
     app.run(debug=True)
