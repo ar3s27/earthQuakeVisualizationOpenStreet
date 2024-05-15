@@ -77,6 +77,7 @@ if __name__ == '__main__':
     while True:
         try:
             app.run(debug=True)
+            time.sleep(60)  # 1 dakika bekle
         except Exception as e:
             print(f"Hata oluştu: {str(e)}")
             time.sleep(60)  # 1 dakika bekle
