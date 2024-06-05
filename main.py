@@ -37,12 +37,14 @@ def create_map_with_markers(data):
         buyukluk = entry['magnitude']
         derinlik = entry['depth']
         lokasyon = entry['location']
+        tarih = entry['date']
 
         # Pencere içeriğini oluşturur
         html = f"""<h4>Lokasyon: {lokasyon}<br>
         Enlem: {enlem}<br>
         Boylam: {boylam}<br>
         Büyüklük: {buyukluk}<br>
+        Tarih: {tarih}<br>
         Derinlik: {derinlik}</h4>"""
 
         # En son depreme göre işaret rengini belirler
