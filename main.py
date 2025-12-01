@@ -84,7 +84,15 @@ def index():
         # Haritayı bir HTML dizesi olarak kaydeder
         map_html = map_with_markers._repr_html_()
 
-        return render_template('index.html', map_html=map_html)
+        # Deprem verilerini listeye çevir ve tarihe göre sırala (en yeni en üstte)
+        earthquake_list = []
+        for quake_id, entry in earthquake_data.items():
+            earthquake_list.append(entry)
+        
+        # Tarihe göre sıralama (varsayılan format YYYY.MM.DD HH:MM:SS olduğu varsayılıyor)
+        earthquake_list.sort(key=lambda x: x['date'], reverse=True)
+
+        return render_template('index.html', map_html=map_html, earthquake_list=earthquake_list)
     else:
         return "Deprem verileri alınamadı."
 
