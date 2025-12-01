@@ -36,6 +36,44 @@
                 {% endfor %}
             </ul>
         </aside>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last 10 Earthquake Maps in Turkey</title>
+    <!-- Folium CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <h1>Turkey Earthquake Monitor</h1>
+            <nav>
+                <a href="#" class="nav-link">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <aside class="sidebar">
+            <h2>Recent Earthquakes</h2>
+            <ul class="quake-list">
+                {% for quake in earthquake_list %}
+                <li class="quake-item {% if loop.first %}latest{% endif %}">
+                    <div class="quake-header">
+                        <span class="location">{{ quake.location }}</span>
+                        <span class="magnitude">{{ quake.magnitude }}</span>
+                    </div>
+                    <div class="details">
+                        <span class="date">{{ quake.date }}</span>
+                        <span class="depth">{{ quake.depth }} km</span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </aside>
         
         <div id="map-container">
             {{ map_html | safe }}
@@ -46,7 +84,42 @@
         <p>&copy; 2025 Turkey Earthquake Monitor. All rights reserved.</p>
     </footer>
 
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Contact Us</h2>
+            <p>If you have any questions or suggestions, please feel free to reach out.</p>
+            <div class="contact-info">
+                <p><strong>Email:</strong> info@earthquakemonitor.tr</p>
+                <p><strong>Phone:</strong> +90 555 123 45 67</p>
+                <p><strong>Address:</strong> Istanbul, Turkey</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Folium JavaScript -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Modal Logic
+        const modal = document.getElementById("contact-modal");
+        const btn = document.querySelector(".nav-link"); // Assuming 'Contact' is the only nav link for now
+        const span = document.getElementsByClassName("close-button")[0];
+
+        btn.onclick = function(e) {
+            e.preventDefault();
+            modal.style.display = "flex";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
