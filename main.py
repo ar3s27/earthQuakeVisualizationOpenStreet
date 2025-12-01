@@ -43,8 +43,8 @@ def create_map_with_markers(data):
     for quake_id, entry in data.items():
         enlem = float(entry['latitude'])
         boylam = float(entry['longitude'])
-        buyukluk = entry['magnitude']
-        derinlik = entry['depth']
+        buyukluk = float(entry['magnitude'])
+        derinlik = float(entry['depth'])
         lokasyon = entry['location']
         tarih = entry['date']
 
