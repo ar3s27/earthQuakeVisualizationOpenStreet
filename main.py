@@ -17,10 +17,16 @@ def fetch_earthquake_data(url):
 def get_marker_color(magnitude):
     if magnitude < 3.0:
         return '#2ecc71' # Green
-    elif magnitude < 4.5:
+    elif magnitude < 4.0:
+        return '#f1c40f' # Yellow
+    elif magnitude < 5.0:
         return '#f39c12' # Orange
+    elif magnitude < 6.0:
+        return '#e67e22' # Dark Orange
+    elif magnitude < 7.0:
+        return '#d35400' # Red-Orange
     else:
-        return '#e74c3c' # Red
+        return '#c0392b' # Red
 
 def create_map_with_markers(data):
     # Haritayı başlatır - Modern tiles
