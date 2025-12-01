@@ -36,44 +36,6 @@
                 {% endfor %}
             </ul>
         </aside>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Last 10 Earthquake Maps in Turkey</title>
-    <!-- Folium CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header class="main-header">
-        <div class="header-content">
-            <h1>Turkey Earthquake Monitor</h1>
-            <nav>
-                <a href="#" class="nav-link">Contact</a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="main-content">
-        <aside class="sidebar">
-            <h2>Recent Earthquakes</h2>
-            <ul class="quake-list">
-                {% for quake in earthquake_list %}
-                <li class="quake-item {% if loop.first %}latest{% endif %}">
-                    <div class="quake-header">
-                        <span class="location">{{ quake.location }}</span>
-                        <span class="magnitude">{{ quake.magnitude }}</span>
-                    </div>
-                    <div class="details">
-                        <span class="date">{{ quake.date }}</span>
-                        <span class="depth">{{ quake.depth }} km</span>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-        </aside>
         
         <div id="map-container">
             {{ map_html | safe }}
