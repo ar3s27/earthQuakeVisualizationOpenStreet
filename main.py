@@ -2,7 +2,7 @@ import branca
 from flask import Flask, render_template
 import requests
 import folium
-from calculations import earthquake_percentage,earthquake_location
+
 
 app = Flask(__name__)
 
@@ -79,16 +79,7 @@ def create_map_with_markers(data):
             fill_opacity=0.9 if is_most_recent else 0.7,
         ).add_to(harita)
 
-    # Daire ekler (Olasılık dairesi)
-    circle = folium.Circle(
-        location=[circle_latitude, circle_longitude],
-        radius=400000,
-        color="red",
-        fill=True,
-        fill_color="red",
-        fill_opacity=0.1,
-        tooltip=f"<h4>Bu Bölgede 3.5 Üzeri Deprem Olma Olasığı %{earthquake_percentage()}</h4>",
-    ).add_to(harita)
+
     
     return harita
 
