@@ -67,6 +67,12 @@ def create_map_with_markers(data):
         # Haritaya CircleMarker ekler
         is_most_recent = (entry == most_recent_quake)
         
+        if is_most_recent:
+             folium.Marker(
+                location=[enlem, boylam],
+                icon=folium.DivIcon(html=f"""<div class="pulsating-circle"></div>""")
+            ).add_to(harita)
+
         folium.CircleMarker(
             location=[enlem, boylam],
             radius=buyukluk * 3, # Büyüklüğe göre yarıçap
