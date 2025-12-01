@@ -3,7 +3,6 @@ from flask import Flask, render_template
 import requests
 import folium
 
-
 app = Flask(__name__)
 
 def fetch_earthquake_data(url):
@@ -30,7 +29,25 @@ def get_marker_color(magnitude):
 
 def create_map_with_markers(data):
     # Haritayı başlatır - Modern tiles
-    harita = folium.Map(location=[38.3335, 35.1500], zoom_start=6, tiles='CartoDB positron')
+    harita = folium.Map(location=[39.0, 35.0], zoom_start=6, tiles='CartoDB positron')
+
+    # Türkiye İl Sınırlarını Ekle (Daha belirgin çizgiler için)
+    try:
+        geojson_url = "https://raw.githubusercontent.com/cihadturhan/tr-geojson/master/geo/tr-cities.json"
+        response = requests.get(geojson_url)
+        if response.status_code == 200:
+            folium.GeoJson(
+                response.json(),
+                name="İl Sınırları",
+                style_function=lambda x: {
+                    'fillColor': 'none',
+                    'color': '#95a5a6', # Belirgin gri renk
+                    'weight': 1.5,      # Çizgi kalınlığı
+                    'fillOpacity': 0
+                }
+            ).add_to(harita)
+    except Exception as e:
+        print(f"Harita sınır verileri yüklenemedi: {e}")
     
     # En güncel deprem verilerini alır
     most_recent_quake = None
@@ -41,18 +58,17 @@ def create_map_with_markers(data):
             most_recent_date = date
             most_recent_quake = entry
 
-    # Circle'ın enlem ve boylamını en son depreme göre ayarla
-    circle_latitude = most_recent_quake['latitude']
-    circle_longitude = most_recent_quake['longitude']
-
     # Verideki her deprem olayı için işlem yapar
     for quake_id, entry in data.items():
-        enlem = float(entry['latitude'])
-        boylam = float(entry['longitude'])
-        buyukluk = float(entry['magnitude'])
-        derinlik = float(entry['depth'])
-        lokasyon = entry['location']
-        tarih = entry['date']
+        try:
+            enlem = float(entry['latitude'])
+            boylam = float(entry['longitude'])
+            buyukluk = float(entry['magnitude'])
+            derinlik = float(entry['depth'])
+            lokasyon = entry['location']
+            tarih = entry['date']
+        except ValueError:
+            continue
 
         # Pencere içeriğini oluşturur - Modern styling
         html = f"""
@@ -91,8 +107,6 @@ def create_map_with_markers(data):
             fill_opacity=0.9 if is_most_recent else 0.7,
         ).add_to(harita)
 
-
-    
     return harita
 
 @app.route('/map')
