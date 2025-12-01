@@ -35,6 +35,46 @@
                 </li>
                 {% endfor %}
             </ul>
+        </aside>
+        
+        <div id="map-container">
+            <iframe id="map-frame" src="/map"></iframe>
+            
+            <!-- Map Legend -->
+            <div class="map-legend">
+                <div class="legend-title">Büyüklük</div>
+                <ul class="legend-list">
+                    <li>
+                        <span class="color-dot" style="background-color: #2ecc71;"></span>
+                        <span class="label">&lt; 3.0</span>
+                    </li>
+                    <li>
+                        <span class="color-dot" style="background-color: #f1c40f;"></span>
+                        <span class="label">3.0 - 3.9</span>
+                    </li>
+                    <li>
+                        <span class="color-dot" style="background-color: #f39c12;"></span>
+                        <span class="label">4.0 - 4.9</span>
+                    </li>
+                    <li>
+                        <span class="color-dot" style="background-color: #e67e22;"></span>
+                        <span class="label">5.0 - 5.9</span>
+                    </li>
+                    <li>
+                        <span class="color-dot" style="background-color: #d35400;"></span>
+                        <span class="label">6.0 - 6.9</span>
+                    </li>
+                    <li>
+                        <span class="color-dot" style="background-color: #c0392b;"></span>
+                        <span class="label">&gt; 7.0</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Turkey Earthquake Monitor. All rights reserved.</p>
     </footer>
 
     <!-- Contact Modal -->
