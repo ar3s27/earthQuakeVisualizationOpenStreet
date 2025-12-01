@@ -14,9 +14,18 @@ def fetch_earthquake_data(url):
         print("Deprem Verileri Alınamadı:", response.status_code)
         return None
 
+def get_marker_color(magnitude):
+    if magnitude < 3.0:
+        return '#2ecc71' # Green
+    elif magnitude < 4.5:
+        return '#f39c12' # Orange
+    else:
+        return '#e74c3c' # Red
+
 def create_map_with_markers(data):
-    # Haritayı başlatır
-    harita = folium.Map(location=[38.3335, 35.1500], zoom_start=6)
+    # Haritayı başlatır - Modern tiles
+    harita = folium.Map(location=[38.3335, 35.1500], zoom_start=6, tiles='CartoDB positron')
+    
     # En güncel deprem verilerini alır
     most_recent_quake = None
     most_recent_date = ""
@@ -39,31 +48,42 @@ def create_map_with_markers(data):
         lokasyon = entry['location']
         tarih = entry['date']
 
-        # Pencere içeriğini oluşturur
-        html = f"""<h4>Lokasyon: {lokasyon}<br>
-        Enlem: {enlem}<br>
-        Boylam: {boylam}<br>
-        Büyüklük: {buyukluk}<br>
-        Tarih: {tarih}<br>
-        Derinlik: {derinlik}</h4>"""
+        # Pencere içeriğini oluşturur - Modern styling
+        html = f"""
+        <div style="font-family: 'Inter', sans-serif; font-size: 14px; color: #333;">
+            <h4 style="margin: 0 0 8px 0; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 4px;">{lokasyon}</h4>
+            <div style="margin-bottom: 4px;"><strong>Büyüklük:</strong> <span style="background: {get_marker_color(buyukluk)}; color: white; padding: 2px 6px; border-radius: 4px;">{buyukluk}</span></div>
+            <div style="margin-bottom: 4px;"><strong>Tarih:</strong> {tarih}</div>
+            <div style="margin-bottom: 4px;"><strong>Derinlik:</strong> {derinlik} km</div>
+            <div><strong>Enlem/Boylam:</strong> {enlem}, {boylam}</div>
+        </div>
+        """
 
-        # En son depreme göre işaret rengini belirler
-        if entry == most_recent_quake:
-            marker_color = 'red'  #  En son deprem işareti için istediğiniz rengi seçebilirsiniz
-        else:
-            marker_color = 'blue'
+        marker_color = get_marker_color(buyukluk)
         
-        iframe = branca.element.IFrame(html=html, width=250, height=125)
+        iframe = branca.element.IFrame(html=html, width=280, height=160)
         popup = folium.Popup(iframe, max_width=500)
-        # Haritaya işaret ekler
-        folium.Marker([enlem, boylam], popup=popup, icon=folium.Icon(color=marker_color)).add_to(harita)
-    # Daire ekler
+        
+        # Haritaya CircleMarker ekler
+        folium.CircleMarker(
+            location=[enlem, boylam],
+            radius=buyukluk * 3, # Büyüklüğe göre yarıçap
+            popup=popup,
+            color=marker_color,
+            fill=True,
+            fill_color=marker_color,
+            fill_opacity=0.7,
+            weight=1
+        ).add_to(harita)
+
+    # Daire ekler (Olasılık dairesi)
     circle = folium.Circle(
         location=[circle_latitude, circle_longitude],
         radius=400000,
         color="red",
         fill=True,
         fill_color="red",
+        fill_opacity=0.1,
         tooltip=f"<h4>Bu Bölgede 3.5 Üzeri Deprem Olma Olasığı %{earthquake_percentage()}</h4>",
     ).add_to(harita)
     
