@@ -27,5 +27,5 @@ document.addEventListener("DOMContentLoaded", function () {
     if (mapFrame) {
       mapFrame.src = mapFrame.src;
     }
-  }, 60000);
+  }, 30000);
 });

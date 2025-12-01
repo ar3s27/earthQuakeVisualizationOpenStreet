@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
+* {
+    box-sizing: border-box;
+}
+
 body, html {
     margin: 0;
     padding: 0;
@@ -9,6 +13,8 @@ body, html {
     display: flex;
     flex-direction: column;
 }
+
+
 
 /* Header */
 .main-header {
@@ -430,15 +436,21 @@ body, html {
 
     .quake-header {
         margin-bottom: 4px;
+        align-items: center;
     }
 
     .location {
         font-size: 0.9rem; /* Smaller font */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 65%; /* Prevent text overflow */
     }
 
     .magnitude {
         font-size: 0.9rem; /* Smaller font */
         padding: 2px 6px;
+        flex-shrink: 0;
     }
 
     .details {
