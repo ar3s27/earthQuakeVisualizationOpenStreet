@@ -413,46 +413,72 @@ body, html {
         order: 2; /* Ensure sidebar is second */
         border-right: none;
         border-top: 1px solid #e0e0e0;
-        padding: 15px;
+        padding: 10px; /* Reduced padding */
         overflow: visible; /* Disable internal scroll, use page scroll */
+    }
+
+    .quake-item {
+        padding: 10px; /* Reduced padding */
+        margin-bottom: 8px;
+    }
+
+    .quake-header {
+        margin-bottom: 4px;
+    }
+
+    .location {
+        font-size: 0.9rem; /* Smaller font */
+    }
+
+    .magnitude {
+        font-size: 0.9rem; /* Smaller font */
+        padding: 2px 6px;
+    }
+
+    .details {
+        font-size: 0.75rem; /* Smaller font */
     }
 
     .main-header {
         padding: 0 15px;
+        height: 50px; /* Reduced header height */
     }
 
     .main-header h1 {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
-    /* Adjust Legend for Mobile */
+    /* Adjust Legend for Mobile - Make it smaller */
     .map-legend {
         bottom: 10px;
         left: 10px;
-        padding: 8px;
-        min-width: 110px;
+        padding: 6px 10px; /* Reduced padding */
+        min-width: auto; /* Let content define width */
+        background: rgba(255, 255, 255, 0.8); /* More transparent */
+        backdrop-filter: blur(4px);
     }
 
     .legend-title {
-        font-size: 12px;
-        margin-bottom: 4px;
+        font-size: 11px;
+        margin-bottom: 3px;
+        font-weight: 600;
     }
 
     .legend-list li {
-        font-size: 11px;
-        margin-bottom: 3px;
+        font-size: 10px;
+        margin-bottom: 2px;
     }
 
     .color-dot {
-        width: 10px;
-        height: 10px;
-        margin-right: 6px;
+        width: 8px;
+        height: 8px;
+        margin-right: 5px;
     }
 
     /* Adjust Modal for Mobile */
     .modal-content {
         width: 90%;
-        margin-top: 20vh;
-        padding: 20px;
+        margin-top: 15vh;
+        padding: 15px;
     }
 }
