@@ -383,26 +383,38 @@ body, html {
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+    /* Allow page scrolling */
+    body, html {
+        height: auto;
+        overflow-x: hidden;
+    }
+
     .main-content {
         flex-direction: column; /* Stack vertically */
+        height: auto; /* Let content define height */
+        overflow: visible;
     }
 
     /* Map on top */
     #map-container {
-        height: 55vh; /* Take up 55% of the viewport height */
+        height: 50vh; /* Fixed height for map (half screen) */
         width: 100%;
         order: 1; /* Ensure map is first */
-        border-radius: 0 0 16px 16px; /* Rounded corners only at bottom */
+        border-radius: 0 0 16px 16px;
+        position: relative;
+        z-index: 1;
     }
 
-    /* Sidebar below */
+    /* Sidebar (List) below */
     .sidebar {
         width: 100%;
-        height: 45vh; /* Take up remaining height */
+        height: auto; /* Natural height */
+        max-height: none; /* Remove any height constraints */
         order: 2; /* Ensure sidebar is second */
         border-right: none;
         border-top: 1px solid #e0e0e0;
         padding: 15px;
+        overflow: visible; /* Disable internal scroll, use page scroll */
     }
 
     .main-header {
@@ -417,18 +429,18 @@ body, html {
     .map-legend {
         bottom: 10px;
         left: 10px;
-        padding: 10px;
-        min-width: 120px;
+        padding: 8px;
+        min-width: 110px;
     }
 
     .legend-title {
         font-size: 12px;
-        margin-bottom: 5px;
+        margin-bottom: 4px;
     }
 
     .legend-list li {
         font-size: 11px;
-        margin-bottom: 4px;
+        margin-bottom: 3px;
     }
 
     .color-dot {
@@ -439,8 +451,8 @@ body, html {
 
     /* Adjust Modal for Mobile */
     .modal-content {
-        width: 95%;
+        width: 90%;
+        margin-top: 20vh;
         padding: 20px;
-        margin-top: 20%;
     }
 }
