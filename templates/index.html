@@ -79,34 +79,6 @@
 
     <!-- Folium JavaScript -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // Modal Logic
-        const modal = document.getElementById("contact-modal");
-        const btn = document.querySelector(".nav-link"); 
-        const span = document.getElementsByClassName("close-button")[0];
-
-        btn.onclick = function(e) {
-            e.preventDefault();
-            modal.style.display = "flex";
-        }
-
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // Auto-refresh map every 60 seconds
-        setInterval(function() {
-            const mapFrame = document.getElementById('map-frame');
-            if (mapFrame) {
-                mapFrame.src = mapFrame.src;
-            }
-        }, 60000);
-    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
