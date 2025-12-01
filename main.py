@@ -32,22 +32,9 @@ def create_map_with_markers(data):
     harita = folium.Map(location=[39.0, 35.0], zoom_start=6, tiles='CartoDB positron')
 
     # Türkiye İl Sınırlarını Ekle (Daha belirgin çizgiler için)
-    try:
-        geojson_url = "https://raw.githubusercontent.com/cihadturhan/tr-geojson/master/geo/tr-cities.json"
-        response = requests.get(geojson_url)
-        if response.status_code == 200:
-            folium.GeoJson(
-                response.json(),
-                name="İl Sınırları",
-                style_function=lambda x: {
-                    'fillColor': 'none',
-                    'color': '#95a5a6', # Belirgin gri renk
-                    'weight': 1.5,      # Çizgi kalınlığı
-                    'fillOpacity': 0
-                }
-            ).add_to(harita)
-    except Exception as e:
-        print(f"Harita sınır verileri yüklenemedi: {e}")
+    # GeoJSON yüklemesi haritayı bozduğu için geçici olarak kaldırıldı.
+    # Alternatif bir yöntem veya daha güvenilir bir kaynak kullanılabilir.
+    pass
     
     # En güncel deprem verilerini alır
     most_recent_quake = None
