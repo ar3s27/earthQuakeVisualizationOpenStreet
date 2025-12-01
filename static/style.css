@@ -309,3 +309,71 @@ body, html {
         transform: scale(2);
     }
 }
+
+/* Map Container & Iframe */
+#map-container {
+    position: relative; /* For absolute positioning of legend */
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+#map-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* Map Legend */
+.map-legend {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    z-index: 1000; /* Ensure it's above the map */
+    font-family: 'Inter', sans-serif;
+    min-width: 180px;
+}
+
+.map-legend h4 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 5px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #34495e;
+}
+
+.legend-item:last-child {
+    margin-bottom: 0;
+}
+
+.color-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.color-box.green { background-color: #2ecc71; }
+.color-box.orange { background-color: #f39c12; }
+.color-box.red { background-color: #e74c3c; }

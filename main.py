@@ -89,6 +89,21 @@ def create_map_with_markers(data):
     
     return harita
 
+@app.route('/map')
+def map_page():
+    # Deprem veri URL'si
+    url = "https://deprem-gorsellestirme.vercel.app"
+    # Deprem verilerini alır
+    earthquake_data = fetch_earthquake_data(url)
+
+    if earthquake_data:
+        # İşaretli haritayı oluşturur
+        map_with_markers = create_map_with_markers(earthquake_data)
+        # Haritayı bir HTML dizesi olarak döndürür
+        return map_with_markers._repr_html_()
+    else:
+        return "Harita yüklenemedi."
+
 @app.route('/')
 def index():
     # Deprem veri URL'si
@@ -98,21 +113,15 @@ def index():
     earthquake_data = fetch_earthquake_data(url)
 
     if earthquake_data:
-        # İşaretli haritayı oluşturur
-        map_with_markers = create_map_with_markers(earthquake_data)
-
-        # Haritayı bir HTML dizesi olarak kaydeder
-        map_html = map_with_markers._repr_html_()
-
         # Deprem verilerini listeye çevir ve tarihe göre sırala (en yeni en üstte)
         earthquake_list = []
         for quake_id, entry in earthquake_data.items():
             earthquake_list.append(entry)
         
-        # Tarihe göre sıralama (varsayılan format YYYY.MM.DD HH:MM:SS olduğu varsayılıyor)
+        # Tarihe göre sıralama
         earthquake_list.sort(key=lambda x: x['date'], reverse=True)
 
-        return render_template('index.html', map_html=map_html, earthquake_list=earthquake_list)
+        return render_template('index.html', earthquake_list=earthquake_list)
     else:
         return "Deprem verileri alınamadı."
 

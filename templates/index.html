@@ -38,7 +38,24 @@
         </aside>
         
         <div id="map-container">
-            {{ map_html | safe }}
+            <iframe id="map-frame" src="/map"></iframe>
+            
+            <!-- Map Legend -->
+            <div class="map-legend">
+                <h4>Magnitude Scale</h4>
+                <div class="legend-item">
+                    <span class="color-box green"></span>
+                    <span>&lt; 3.0 (Minor)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="color-box orange"></span>
+                    <span>3.0 - 4.5 (Moderate)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="color-box red"></span>
+                    <span>&gt; 4.5 (Strong)</span>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -65,7 +82,7 @@
     <script>
         // Modal Logic
         const modal = document.getElementById("contact-modal");
-        const btn = document.querySelector(".nav-link"); // Assuming 'Contact' is the only nav link for now
+        const btn = document.querySelector(".nav-link"); 
         const span = document.getElementsByClassName("close-button")[0];
 
         btn.onclick = function(e) {
@@ -82,6 +99,14 @@
                 modal.style.display = "none";
             }
         }
+
+        // Auto-refresh map every 60 seconds
+        setInterval(function() {
+            const mapFrame = document.getElementById('map-frame');
+            if (mapFrame) {
+                mapFrame.src = mapFrame.src;
+            }
+        }, 60000);
     </script>
 </body>
 </html>
