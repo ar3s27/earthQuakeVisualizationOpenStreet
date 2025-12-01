@@ -10,30 +10,41 @@
 </head>
 <body>
     <header class="main-header">
-        <h1>Turkey Earthquake Monitor</h1>
+        <div class="header-content">
+            <h1>Turkey Earthquake Monitor</h1>
+            <nav>
+                <a href="#" class="nav-link">Contact</a>
+            </nav>
+        </div>
     </header>
 
-    <div id="map">
-        {{ map_html | safe }}
-    </div>
-    
-    <div class="sidebar">
-        <h2>Recent Earthquakes</h2>
-        <ul class="quake-list">
-            {% for quake in earthquake_list %}
-            <li class="quake-item {% if loop.first %}latest{% endif %}">
-                <div class="quake-header">
-                    <span class="location">{{ quake.location }}</span>
-                    <span class="magnitude">{{ quake.magnitude }}</span>
-                </div>
-                <div class="details">
-                    <span class="date">{{ quake.date }}</span>
-                    <span class="depth">{{ quake.depth }} km</span>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+    <main class="main-content">
+        <aside class="sidebar">
+            <h2>Recent Earthquakes</h2>
+            <ul class="quake-list">
+                {% for quake in earthquake_list %}
+                <li class="quake-item {% if loop.first %}latest{% endif %}">
+                    <div class="quake-header">
+                        <span class="location">{{ quake.location }}</span>
+                        <span class="magnitude">{{ quake.magnitude }}</span>
+                    </div>
+                    <div class="details">
+                        <span class="date">{{ quake.date }}</span>
+                        <span class="depth">{{ quake.depth }} km</span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </aside>
+        
+        <div id="map-container">
+            {{ map_html | safe }}
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Turkey Earthquake Monitor. All rights reserved.</p>
+    </footer>
 
     <!-- Folium JavaScript -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
