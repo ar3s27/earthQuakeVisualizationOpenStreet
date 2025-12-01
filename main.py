@@ -2,15 +2,20 @@ import branca
 from flask import Flask, render_template
 import requests
 import folium
+import traceback
 
 app = Flask(__name__)
 
 def fetch_earthquake_data(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print("Deprem Verileri Alınamadı:", response.status_code)
+    try:
+        response = requests.get(url, timeout=10)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Deprem Verileri Alınamadı: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"Veri çekme hatası: {e}")
         return None
 
 def get_marker_color(magnitude):
@@ -31,19 +36,22 @@ def create_map_with_markers(data):
     # Haritayı başlatır - Modern tiles
     harita = folium.Map(location=[39.0, 35.0], zoom_start=6, tiles='CartoDB positron')
 
-    # Türkiye İl Sınırlarını Ekle (Daha belirgin çizgiler için)
-    # GeoJSON yüklemesi haritayı bozduğu için geçici olarak kaldırıldı.
-    # Alternatif bir yöntem veya daha güvenilir bir kaynak kullanılabilir.
-    pass
-    
     # En güncel deprem verilerini alır
     most_recent_quake = None
     most_recent_date = ""
+    
+    # Veri kontrolü
+    if not data:
+        return harita
+
     for quake_id, entry in data.items():
-        date = entry['date']
-        if date > most_recent_date:
-            most_recent_date = date
-            most_recent_quake = entry
+        try:
+            date = entry.get('date', '')
+            if date > most_recent_date:
+                most_recent_date = date
+                most_recent_quake = entry
+        except Exception:
+            continue
 
     # Verideki her deprem olayı için işlem yapar
     for quake_id, entry in data.items():
@@ -54,7 +62,7 @@ def create_map_with_markers(data):
             derinlik = float(entry['depth'])
             lokasyon = entry['location']
             tarih = entry['date']
-        except ValueError:
+        except (ValueError, KeyError, TypeError):
             continue
 
         # Pencere içeriğini oluşturur - Modern styling
@@ -98,39 +106,45 @@ def create_map_with_markers(data):
 
 @app.route('/map')
 def map_page():
-    # Deprem veri URL'si
-    url = "https://deprem-gorsellestirme.vercel.app"
-    # Deprem verilerini alır
-    earthquake_data = fetch_earthquake_data(url)
+    try:
+        # Deprem veri URL'si
+        url = "https://deprem-gorsellestirme.vercel.app"
+        # Deprem verilerini alır
+        earthquake_data = fetch_earthquake_data(url)
 
-    if earthquake_data:
-        # İşaretli haritayı oluşturur
-        map_with_markers = create_map_with_markers(earthquake_data)
-        # Haritayı bir HTML dizesi olarak döndürür
-        return map_with_markers._repr_html_()
-    else:
-        return "Harita yüklenemedi."
+        if earthquake_data:
+            # İşaretli haritayı oluşturur
+            map_with_markers = create_map_with_markers(earthquake_data)
+            # Haritayı bir HTML dizesi olarak döndürür
+            return map_with_markers._repr_html_()
+        else:
+            return "<h3>Harita yüklenemedi: Veri alınamadı.</h3>"
+    except Exception as e:
+        return f"<h3>Harita hatası: {str(e)}</h3><pre>{traceback.format_exc()}</pre>"
 
 @app.route('/')
 def index():
-    # Deprem veri URL'si
-    url = "https://deprem-gorsellestirme.vercel.app"
+    try:
+        # Deprem veri URL'si
+        url = "https://deprem-gorsellestirme.vercel.app"
 
-    # Deprem verilerini alır
-    earthquake_data = fetch_earthquake_data(url)
+        # Deprem verilerini alır
+        earthquake_data = fetch_earthquake_data(url)
 
-    if earthquake_data:
-        # Deprem verilerini listeye çevir ve tarihe göre sırala (en yeni en üstte)
-        earthquake_list = []
-        for quake_id, entry in earthquake_data.items():
-            earthquake_list.append(entry)
-        
-        # Tarihe göre sıralama
-        earthquake_list.sort(key=lambda x: x['date'], reverse=True)
+        if earthquake_data:
+            # Deprem verilerini listeye çevir ve tarihe göre sırala (en yeni en üstte)
+            earthquake_list = []
+            for quake_id, entry in earthquake_data.items():
+                earthquake_list.append(entry)
+            
+            # Tarihe göre sıralama
+            earthquake_list.sort(key=lambda x: x.get('date', ''), reverse=True)
 
-        return render_template('index.html', earthquake_list=earthquake_list)
-    else:
-        return "Deprem verileri alınamadı."
+            return render_template('index.html', earthquake_list=earthquake_list)
+        else:
+            return render_template('index.html', earthquake_list=[])
+    except Exception as e:
+        return f"Sayfa yükleme hatası: {str(e)}"
 
 if __name__ == '__main__':
     app.run(debug=True)
