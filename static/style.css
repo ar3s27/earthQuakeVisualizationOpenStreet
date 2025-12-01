@@ -382,7 +382,7 @@ body, html {
 }
 
 /* Mobile Responsiveness */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     /* Allow page scrolling */
     body, html {
         height: auto;
