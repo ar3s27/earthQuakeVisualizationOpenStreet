@@ -92,7 +92,7 @@ def create_map_with_markers(data):
 
         folium.CircleMarker(
             location=[enlem, boylam],
-            radius=buyukluk * 6, # Büyüklüğe göre yarıçap
+            radius=buyukluk * 5, # Büyüklüğe göre yarıçap
             popup=popup,
             tooltip="En Son Deprem" if is_most_recent else None,
             color='black' if is_most_recent else marker_color,
