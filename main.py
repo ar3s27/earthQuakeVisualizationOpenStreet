@@ -65,15 +65,18 @@ def create_map_with_markers(data):
         popup = folium.Popup(iframe, max_width=500)
         
         # Haritaya CircleMarker ekler
+        is_most_recent = (entry == most_recent_quake)
+        
         folium.CircleMarker(
             location=[enlem, boylam],
             radius=buyukluk * 3, # Büyüklüğe göre yarıçap
             popup=popup,
-            color=marker_color,
+            tooltip="En Son Deprem" if is_most_recent else None,
+            color='black' if is_most_recent else marker_color,
+            weight=3 if is_most_recent else 1,
             fill=True,
             fill_color=marker_color,
-            fill_opacity=0.7,
-            weight=1
+            fill_opacity=0.9 if is_most_recent else 0.7,
         ).add_to(harita)
 
     # Daire ekler (Olasılık dairesi)
