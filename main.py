@@ -3,6 +3,10 @@ from flask import Flask, render_template
 import requests
 import folium
 import traceback
+import os
+
+# Deprem verisinin alındığı API. Ev sunucusunda http://deprem-api:8000 olarak ayarlanır.
+DEPREM_API_URL = os.environ.get("DEPREM_API_URL", "https://deprem-gorsellestirme.vercel.app")
 
 app = Flask(__name__)
 
@@ -108,7 +112,7 @@ def create_map_with_markers(data):
 def map_page():
     try:
         # Deprem veri URL'si
-        url = "https://deprem-gorsellestirme.vercel.app"
+        url = DEPREM_API_URL
         # Deprem verilerini alır
         earthquake_data = fetch_earthquake_data(url)
 
@@ -126,7 +130,7 @@ def map_page():
 def index():
     try:
         # Deprem veri URL'si
-        url = "https://deprem-gorsellestirme.vercel.app"
+        url = DEPREM_API_URL
 
         # Deprem verilerini alır
         earthquake_data = fetch_earthquake_data(url)

@@ -1,0 +1,24 @@
+# Deprem haritası (Flask + folium) — son depremleri OpenStreetMap üzerinde gösterir.
+# Sunucuda ~/apps/deprem-harita/compose.yaml olarak durur; deploy/deploy.sh günceller.
+# Veriyi aynı sunucudaki Deprem API'sinden (http://deprem-api:8000) alır.
+# Cloudflare Tunnel ona ortak "web" ağı üzerinden http://deprem-harita:5000 adresiyle ulaşır.
+services:
+  web:
+    build: ./app
+    image: deprem-harita:latest
+    container_name: deprem-harita
+    restart: unless-stopped
+    environment:
+      DEPREM_API_URL: http://deprem-api:8000
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      web:
+        aliases: [deprem-harita]
+
+networks:
+  web:
+    external: true
