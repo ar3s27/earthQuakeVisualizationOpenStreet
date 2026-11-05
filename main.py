@@ -37,8 +37,8 @@ def get_marker_color(magnitude):
         return '#c0392b' # Red
 
 def create_map_with_markers(data):
-    # Haritayı başlatır - Modern tiles
-    harita = folium.Map(location=[39.0, 35.0], zoom_start=6, tiles='CartoDB positron')
+    # Haritayı başlatır (CartoDB artık anahtarsız isteklere uyarılı karo döndürüyor)
+    harita = folium.Map(location=[39.0, 35.0], zoom_start=6, tiles='OpenStreetMap')
 
     # En güncel deprem verilerini alır
     most_recent_quake = None
